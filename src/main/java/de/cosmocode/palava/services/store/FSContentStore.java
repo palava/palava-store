@@ -28,9 +28,9 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import de.cosmocode.palava.MimeType;
 import de.cosmocode.palava.core.protocol.content.Content;
 import de.cosmocode.palava.core.protocol.content.FileContent;
+import de.cosmocode.palava.core.protocol.content.MimeType;
 import de.cosmocode.palava.core.protocol.content.StreamContent;
 
 /**
