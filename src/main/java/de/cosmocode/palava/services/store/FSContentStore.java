@@ -26,6 +26,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
 import de.cosmocode.palava.core.protocol.content.Content;
@@ -38,6 +39,7 @@ import de.cosmocode.palava.core.protocol.content.StreamContent;
  *
  * @author Willi Schoenborn
  */
+@Singleton
 public class FSContentStore implements ContentStore {
     
     private static final Logger log = Logger.getLogger(FSContentStore.class);
