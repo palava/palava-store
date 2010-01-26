@@ -44,11 +44,11 @@ public class FSContentStore implements ContentStore {
     
     private static final Logger log = Logger.getLogger(FSContentStore.class);
     
-    private File dir;
+    private final File root;
     
     @Inject
-    public FSContentStore(@Named("content.store.root") String root) {
-        dir = new File(root);
+    public FSContentStore(@Named("contentstore.root") File root) {
+        this.root = root;
     }
 
     private String generateFilename(MimeType mimeType) {
@@ -56,7 +56,7 @@ public class FSContentStore implements ContentStore {
     }
 
     private File mkFile(String name) {
-        return new File(dir, name);
+        return new File(root, name);
     }
 
     @Override
