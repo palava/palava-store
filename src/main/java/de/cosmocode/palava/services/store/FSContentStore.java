@@ -42,14 +42,14 @@ import de.cosmocode.palava.bridge.content.StreamContent;
  */
 public final class FSContentStore implements ContentStore {
     
-    private static final Logger log = LoggerFactory.getLogger(FSContentStore.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FSContentStore.class);
     
     private final File root;
     
     @Inject
     public FSContentStore(@Named("contentstore.root") File root) {
         this.root = Preconditions.checkNotNull(root, "Root");
-        log.info("Configured file system content store: {}", root);
+        LOG.info("Configured file system content store: {}", root);
     }
 
     private String generateFilename(MimeType mimeType) {
@@ -97,7 +97,11 @@ public final class FSContentStore implements ContentStore {
     @Override
     public void remove(String key) {
         final File file = mkFile(key);
-        if (!file.delete()) log.error("cannot delete " + file.getAbsolutePath());
+        if (file.delete()) {
+            LOG.info("Deleted file {}", file.getAbsoluteFile());
+        } else {
+            LOG.error("Failed to delete {}", file.getAbsolutePath());
+        }
     }
 
 }
