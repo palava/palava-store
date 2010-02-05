@@ -36,7 +36,7 @@ import de.cosmocode.palava.bridge.content.FileContent;
 import de.cosmocode.palava.bridge.content.StreamContent;
 
 /**
- * 
+ * File system base {@link ContentStore} implementation.
  *
  * @author Willi Schoenborn
  */
@@ -56,13 +56,13 @@ public final class FSContentStore implements ContentStore {
         return DigestUtils.md5Hex(Long.toString(System.currentTimeMillis())) + "." + mimeType.getMinor();
     }
 
-    private File mkFile(String name) {
+    private File createFile(String name) {
         return new File(root, name);
     }
 
     @Override
     public StreamContent load(String key) throws Exception {
-        final File file = mkFile(key);
+        final File file = createFile(key);
 
         if (!file.exists()) return null;
         return new FileContent(file);
@@ -72,7 +72,7 @@ public final class FSContentStore implements ContentStore {
     public String store(Content content) throws Exception {
         
         final String name = generateFilename(content.getMimeType());
-        final File file = mkFile(name);
+        final File file = createFile(name);
         
         final FileOutputStream out = new FileOutputStream(file);
         content.write(out);
@@ -81,22 +81,9 @@ public final class FSContentStore implements ContentStore {
         return name;
     }
 
-//    public String store(InputStream in, MimeType mimeType) throws Exception {
-//        final String name = generateFilename(mimeType);
-//        final File file = mkFile(name);
-//        
-//        final FileOutputStream out = new FileOutputStream(file);
-//        
-//        IOUtils.copy(in, out);
-//        out.flush();
-//        out.close();
-//        
-//        return name;
-//    }
-
     @Override
     public void remove(String key) {
-        final File file = mkFile(key);
+        final File file = createFile(key);
         if (file.delete()) {
             LOG.info("Deleted file {}", file.getAbsoluteFile());
         } else {
