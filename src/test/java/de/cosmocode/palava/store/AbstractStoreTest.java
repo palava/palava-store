@@ -24,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
@@ -57,10 +58,15 @@ public abstract class AbstractStoreTest implements UnitProvider<Store> {
      */
     @Test
     public void create() throws IOException {
-        final InputStream stream = new ByteArrayInputStream("data".getBytes());
-        final String identifier = unit().create(stream);
-        Assert.assertNotNull(identifier);
-        Assert.assertFalse(identifier.isEmpty());
+        final Store unit = unit();
+        final InputStream stream = getClass().getClassLoader().getResourceAsStream("willi.png");
+        Assert.assertNotNull(stream);
+        final String identifier = unit.create(stream);
+        stream.close();
+        Assert.assertTrue(IOUtils.contentEquals(
+            getClass().getClassLoader().getResourceAsStream("willi.png"), 
+            unit.read(identifier)
+        ));
     }
 
     /**
@@ -97,7 +103,7 @@ public abstract class AbstractStoreTest implements UnitProvider<Store> {
      */
     @Test(expected = IOException.class)
     public void readMissing() throws IOException {
-        unit().read("no-such-key");
+        unit().read(UUID.randomUUID().toString());
     }
     
     /**
@@ -131,7 +137,7 @@ public abstract class AbstractStoreTest implements UnitProvider<Store> {
      */
     @Test(expected = IOException.class)
     public void deleteMissing() throws IOException {
-        unit().delete("no-such-key");
+        unit().delete(UUID.randomUUID().toString());
     }
     
 }
