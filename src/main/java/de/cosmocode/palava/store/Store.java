@@ -22,6 +22,7 @@ package de.cosmocode.palava.store;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Set;
 
 /**
  * A {@link Store} allows storing binary data.
@@ -42,6 +43,16 @@ public interface Store {
     String create(InputStream stream) throws IOException;
     
     /**
+     * Stores the given stream in this store using the specified identifier.
+     * 
+     * @param stream the binary data being stored
+     * @param identifier the identifier being used
+     * @throws NullPointerException if stream or identifier is null
+     * @throws IOException if saving failed
+     */
+    void create(InputStream stream, String identifier) throws IOException;
+    
+    /**
      * Retrieves the binary data for a given identifier.
      * 
      * @param identifier the identifier of the binary data being retrieved
@@ -52,6 +63,14 @@ public interface Store {
      * @throws IOException if reading failed
      */
     InputStream read(String identifier) throws IOException;
+    
+    /**
+     * Provides a set of all identifiers currently present in this store.
+     * 
+     * @return a set of all identifiers
+     * @throws IOException if reading failed
+     */
+    Set<String> list() throws IOException; 
     
     /**
      * Removes binary data from this store.
