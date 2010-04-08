@@ -24,11 +24,14 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.google.inject.internal.Sets;
 
 import de.cosmocode.junit.UnitProvider;
 
@@ -52,7 +55,7 @@ public abstract class AbstractStoreTest implements UnitProvider<Store> {
     }
     
     /**
-     * Tests {@link Store#create(InputStream)} with a {@link ByteArrayInputStream}.
+     * Tests {@link Store#create(InputStream)}.
      * 
      * @throws IOException should not happen
      */
@@ -62,6 +65,57 @@ public abstract class AbstractStoreTest implements UnitProvider<Store> {
         final InputStream stream = getClass().getClassLoader().getResourceAsStream("willi.png");
         Assert.assertNotNull(stream);
         final String identifier = unit.create(stream);
+        stream.close();
+        Assert.assertTrue(IOUtils.contentEquals(
+            getClass().getClassLoader().getResourceAsStream("willi.png"), 
+            unit.read(identifier)
+        ));
+    }
+    
+    /**
+     * Tests {@link Store#create(InputStream, String)} with a null stream.
+     * 
+     * @throws IOException should not happen
+     */
+    @Test(expected = NullPointerException.class)
+    public void createStreamNull() throws IOException {
+        unit().create(null, UUID.randomUUID().toString());
+    }
+    
+    /**
+     * Tests {@link Store#create(InputStream, String)} with a null identifier.
+     * 
+     * @throws IOException should not happen.
+     */
+    @Test(expected = NullPointerException.class)
+    public void createIdentifierNull() throws IOException {
+        final InputStream stream = getClass().getClassLoader().getResourceAsStream("willi.png");
+        unit().create(stream, null);
+    }
+    
+    /**
+     * Tests {@link Store#create(InputStream, String)} with a null stream
+     * and a null identifier.
+     * 
+     * @throws IOException should not happen
+     */
+    @Test(expected = NullPointerException.class)
+    public void createStreamIdentifierNull() throws IOException {
+        unit().create(null, null);
+    }
+    
+    /**
+     * Tests {@link Store#create(InputStream, String)}.
+     * 
+     * @throws IOException should not happen
+     */
+    @Test
+    public void createStreamIdentifier() throws IOException {
+        final Store unit = unit();
+        final InputStream stream = getClass().getClassLoader().getResourceAsStream("willi.png");
+        Assert.assertNotNull(stream);
+        final String identifier = Long.toString(System.currentTimeMillis());
+        unit.create(stream, identifier);
         stream.close();
         Assert.assertTrue(IOUtils.contentEquals(
             getClass().getClassLoader().getResourceAsStream("willi.png"), 
@@ -104,6 +158,32 @@ public abstract class AbstractStoreTest implements UnitProvider<Store> {
     @Test(expected = IOException.class)
     public void readMissing() throws IOException {
         unit().read(UUID.randomUUID().toString());
+    }
+    
+    /**
+     * Tests {@link Store#list()} without adding anything.
+     * 
+     * @throws IOException should not happen 
+     */
+    @Test
+    public void listEmpty() throws IOException {
+        Assert.assertTrue(unit().list().isEmpty());
+    }
+    
+    /**
+     * Tests {@link Store#list()}.
+     * 
+     * @throws IOException should not happen
+     */
+    @Test
+    public void list() throws IOException {
+        final Store unit = unit();
+        final Set<String> identifiers = Sets.newHashSet();
+        final byte[] emptyByteArray = {};
+        identifiers.add(unit.create(new ByteArrayInputStream(emptyByteArray)));
+        identifiers.add(unit.create(new ByteArrayInputStream(emptyByteArray)));
+        Assert.assertEquals(2, identifiers.size());
+        Assert.assertEquals(identifiers, unit.list());
     }
     
     /**
