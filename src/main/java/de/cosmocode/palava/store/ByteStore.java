@@ -47,6 +47,7 @@ public interface ByteStore extends Store {
      * @param buffer the binary data being stored
      * @param identifier the identifier being used
      * @throws NullPointerException if stream or identifier is null
+     * @throws IllegalStateException if the identifier is already present
      * @throws IOException if saving failed
      */
     void create(ByteBuffer buffer, String identifier) throws IOException;

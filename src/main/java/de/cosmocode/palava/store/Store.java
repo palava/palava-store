@@ -48,6 +48,7 @@ public interface Store {
      * @param stream the binary data being stored
      * @param identifier the identifier being used
      * @throws NullPointerException if stream or identifier is null
+     * @throws IllegalStateException if the identifier is already present
      * @throws IOException if saving failed
      */
     void create(InputStream stream, String identifier) throws IOException;

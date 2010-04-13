@@ -105,6 +105,35 @@ public abstract class AbstractStoreTest implements UnitProvider<Store> {
     }
     
     /**
+     * Tests {@link Store#create(InputStream, String)} with a duplicate
+     * identifer.
+     * 
+     * @throws IOException should not happen
+     */
+    @Test(expected = IllegalStateException.class)
+    public void createStreamIdentifierDuplicate() throws IOException {
+        final Store unit = unit();
+        final String identifier = Long.toString(System.currentTimeMillis());
+        
+        InputStream stream;
+        
+        stream = getClass().getClassLoader().getResourceAsStream("willi.png");
+        Assert.assertNotNull(stream);
+        
+        unit.create(stream, identifier);
+        stream.close();
+        
+        stream = getClass().getClassLoader().getResourceAsStream("willi.png");
+        Assert.assertNotNull(stream);
+        
+        try {
+            unit.create(stream, identifier);
+        } finally {
+            stream.close();
+        }
+    }
+    
+    /**
      * Tests {@link Store#create(InputStream, String)}.
      * 
      * @throws IOException should not happen

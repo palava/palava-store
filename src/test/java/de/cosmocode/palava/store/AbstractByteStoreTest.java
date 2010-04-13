@@ -20,6 +20,10 @@
 
 package de.cosmocode.palava.store;
 
+import java.io.IOException;
+
+import org.junit.Test;
+
 import de.cosmocode.junit.UnitProvider;
 
 /**
@@ -29,6 +33,15 @@ import de.cosmocode.junit.UnitProvider;
  */
 public abstract class AbstractByteStoreTest implements UnitProvider<Store> {
 
-    
+    /**
+     * Tests {@link ByteStore#create(ByteBuffer, String)} with a duplicate
+     * identifier.
+     * 
+     * @throws IOException should not happen
+     */
+    @Test(expected = IllegalStateException.class)
+    public void createByteBufferIdentifierDuplicate() throws IOException {
+        // TODO implement
+    }
 
 }
