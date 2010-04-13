@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
+import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -45,6 +46,14 @@ public abstract class AbstractStoreTest implements UnitProvider<Store> {
     private static final String UTF_8 = "UTF-8";
     
     /**
+     * Provides a unit which uses the specified generator.
+     * 
+     * @param generator the {@link IdGenerator} to use
+     * @return a {@link Store}
+     */
+    protected abstract Store unitWithGenerator(IdGenerator generator);
+    
+    /**
      * Tests {@link Store#create(InputStream)} with a null stream.
      * 
      * @throws IOException should not happen 
@@ -52,6 +61,24 @@ public abstract class AbstractStoreTest implements UnitProvider<Store> {
     @Test(expected = NullPointerException.class)
     public void createNull() throws IOException {
         unit().create(null);
+    }
+    
+    /**
+     * Tests {@link Store#create(InputStream)} with a custom {@link IdGenerator}.
+     * 
+     * @throws IOException should not happen
+     */
+    @Test
+    public void createCustomGenerator() throws IOException {
+        final String identifier = Long.toBinaryString(System.nanoTime());
+        final IdGenerator generator = EasyMock.createMock("identifier", IdGenerator.class);
+        EasyMock.expect(generator.generate()).andReturn(identifier);
+        EasyMock.replay(generator);
+        final Store unit = unitWithGenerator(generator);
+        final InputStream stream = getClass().getClassLoader().getResourceAsStream("willi.png");
+        Assert.assertNotNull(stream);
+        final String generatedIdentifier = unit.create(stream);
+        Assert.assertEquals(identifier, generatedIdentifier);
     }
     
     /**
