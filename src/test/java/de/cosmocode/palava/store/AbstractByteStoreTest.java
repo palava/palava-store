@@ -21,18 +21,23 @@
 package de.cosmocode.palava.store;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import org.junit.Test;
-
-import de.cosmocode.junit.UnitProvider;
 
 /**
  * Abstract test for {@link ByteStore}s.
  *
  * @author Willi Schoenborn
  */
-public abstract class AbstractByteStoreTest implements UnitProvider<Store> {
+public abstract class AbstractByteStoreTest extends AbstractStoreTest {
 
+    @Override
+    public abstract ByteStore unit();
+    
+    @Override
+    protected abstract ByteStore unitWithGenerator(IdGenerator generator);
+    
     /**
      * Tests {@link ByteStore#create(ByteBuffer, String)} with a duplicate
      * identifier.
