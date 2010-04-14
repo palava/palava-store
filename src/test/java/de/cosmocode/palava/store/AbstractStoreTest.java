@@ -79,6 +79,7 @@ public abstract class AbstractStoreTest implements UnitProvider<Store> {
         Assert.assertNotNull(stream);
         final String generatedIdentifier = unit.create(stream);
         Assert.assertEquals(identifier, generatedIdentifier);
+        EasyMock.verify(generator);
     }
     
     /**
