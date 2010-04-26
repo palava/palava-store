@@ -57,6 +57,7 @@ public interface ByteStore extends Store {
      * @throws NullPointerException if identifier is null
      * @throws IllegalArgumentException if identifier is not valid, according to restrictions
      *         introduced by sub classes
+     * @throws IllegalStateException if the identifier is not present
      * @throws IOException if reading failed
      */
     ByteBuffer view(String identifier) throws IOException;

@@ -57,6 +57,7 @@ public interface Store {
      * @throws NullPointerException if identifier is null
      * @throws IllegalArgumentException if identifier is not valid, according to restrictions
      *         introduced by sub classes
+     * @throws IllegalStateException if the identifier is not present
      * @throws IOException if reading failed
      */
     InputStream read(String identifier) throws IOException;
@@ -77,6 +78,7 @@ public interface Store {
      * @throws NullPointerException if identifier is null
      * @throws IllegalArgumentException if identifier is not valid, according to restrictions
      *         introduced by sub classes
+     * @throws IllegalStateException if the identifier is not present
      * @throws IOException if deletion failed, caused by unknown identifier or general io issues
      */
     void delete(String identifier) throws IOException;

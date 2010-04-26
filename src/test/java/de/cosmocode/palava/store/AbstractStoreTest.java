@@ -208,7 +208,7 @@ public abstract class AbstractStoreTest implements UnitProvider<Store> {
      * 
      * @throws IOException expected
      */
-    @Test(expected = IOException.class)
+    @Test(expected = IllegalStateException.class)
     public void readMissing() throws IOException {
         unit().read(UUID.randomUUID().toString());
     }
@@ -268,7 +268,7 @@ public abstract class AbstractStoreTest implements UnitProvider<Store> {
      * 
      * @throws IOException expected
      */
-    @Test(expected = IOException.class)
+    @Test(expected = IllegalStateException.class)
     public void deleteMissing() throws IOException {
         unit().delete(UUID.randomUUID().toString());
     }

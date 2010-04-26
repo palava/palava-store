@@ -25,6 +25,8 @@ public final class StoreConfig {
 
     public static final String PREFIX = "store.";
     
+    public static final String ID_GENERATOR = PREFIX + "idGenerator";
+    
     private StoreConfig() {
         
     }
