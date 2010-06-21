@@ -27,7 +27,7 @@ public final class UUIDGenerator implements IdGenerator {
 
     @Override
     public String generate() {
-        return UUID.randomUUID().toString().replace("-", "");
+        return UUID.randomUUID().toString();
     }
 
 }
