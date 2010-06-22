@@ -68,6 +68,7 @@ public interface Store {
      * 
      * @return a set of all identifiers
      * @throws IOException if reading failed
+     * @throws UnsupportedOperationException if {@link Store#list()} is not supported
      */
     Set<String> list() throws IOException; 
     

@@ -50,6 +50,16 @@ public abstract class AbstractStoreTest implements UnitProvider<Store> {
     protected abstract Store unitWithGenerator(IdGenerator generator);
     
     /**
+     * Hook to disable {@link Store#list()} tests.
+     * 
+     * @since 2.2
+     * @return true if list() is supported, false otherwise
+     */
+    protected boolean supportsList() {
+        return true;
+    }
+    
+    /**
      * Tests {@link Store#create(InputStream)} with a null stream.
      * 
      * @throws IOException should not happen 
@@ -220,7 +230,9 @@ public abstract class AbstractStoreTest implements UnitProvider<Store> {
      */
     @Test
     public void listEmpty() throws IOException {
-        Assert.assertTrue(unit().list().isEmpty());
+        if (supportsList()) {
+            Assert.assertTrue(unit().list().isEmpty());
+        }
     }
     
     /**
@@ -230,13 +242,15 @@ public abstract class AbstractStoreTest implements UnitProvider<Store> {
      */
     @Test
     public void list() throws IOException {
-        final Store unit = unit();
-        final Set<String> identifiers = Sets.newHashSet();
-        final byte[] emptyByteArray = {};
-        identifiers.add(unit.create(new ByteArrayInputStream(emptyByteArray)));
-        identifiers.add(unit.create(new ByteArrayInputStream(emptyByteArray)));
-        Assert.assertEquals(2, identifiers.size());
-        Assert.assertEquals(identifiers, unit.list());
+        if (supportsList()) {
+            final Store unit = unit();
+            final Set<String> identifiers = Sets.newHashSet();
+            final byte[] emptyByteArray = {};
+            identifiers.add(unit.create(new ByteArrayInputStream(emptyByteArray)));
+            identifiers.add(unit.create(new ByteArrayInputStream(emptyByteArray)));
+            Assert.assertEquals(2, identifiers.size());
+            Assert.assertEquals(identifiers, unit.list());
+        }
     }
     
     /**
